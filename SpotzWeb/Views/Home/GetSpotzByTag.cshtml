@@ -1,0 +1,9 @@
+﻿@model IEnumerable<SpotzWeb.Models.Spotz>
+
+@{
+    ViewBag.Title = "Get Spotz By Tag";
+}
+
+<h2>Spotz! tagged "@ViewBag.TagName"</h2>
+
+@Html.Partial("_OneSpotzRow", Model)

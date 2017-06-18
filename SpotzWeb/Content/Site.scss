@@ -1,0 +1,289 @@
+﻿$redColor: #e63946;
+$greenBlue: #a8dadc;
+$darkBlue: #1d3557;
+$midBlue: #457b9d;
+$lightBlue: #f1faee;
+$eggColor: #f7f4de;
+
+@import 'bootstrap-sass-master/bootstrap-sass/assets/stylesheets/bootstrap';
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Overpass:400,700|Titillium+Web');
+
+body {
+    //padding-top: 50px;
+    padding-bottom: 20px;
+    background: #f7f4de;
+    font-family: 'Open Sans', sans-serif;   
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+h1, h2, h3, h4 {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.bottom-air-1 {
+    margin-bottom: 20px;
+}
+
+.move-up-1 {
+    margin-top: -20px;
+}
+.move-up-2 {
+    margin-top: -40px;
+}
+.drag-up-1 {
+    margin-bottom: -20px;
+}
+.drag-up-2 {
+    margin-bottom: -40px;
+}
+
+.list-row {
+    height: 100px;
+    background: #fff;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 10px;
+    border: dotted 1px #ccc;
+}
+
+.smaller-avatar {
+    max-width: 30px;
+}
+
+.no-display {
+    //display: none;
+    opacity: 0.3;
+}
+
+
+/*==== NAVIGATION MODS ====*/
+
+.navbar-header img {
+    padding: 8px;
+}
+.navbar-header  {
+    width: 100%;
+}
+.navbar-nav {
+    text-transform: uppercase;
+}
+.navbar-nav li {
+    margin-top: 5px;
+}
+
+/*== MAIN PAGE ==*/
+
+.list-spotz-item{
+   border: 1px dotted #ccc; 
+   padding: 20px;  
+   margin-bottom: 6px;
+   margin-top: 6px;
+   background: #fff;
+}
+
+.list-spotz-item-title {    
+    padding: 0;
+    margin-top:0;
+}
+.list-spotz-item-title h1 {
+    margin-left: -12px;
+} 
+
+.list-spotz-item p:last-of-type {
+    padding-left: 20px;       
+}
+.list-spotz-username {
+    font-size: 0.8em;
+    margin-left: -3em;
+}
+.list-spotz-description {
+    font-size: 1em;
+}
+#spotzLogo {
+    //opacity: 0;
+}
+
+/*== DETAILS PAGE ==*/
+.comment-section {
+    padding: 20px;
+    background: #f1faee;
+    color: #000;
+    border-bottom: dashed 1px #808080;
+}
+
+.text-area {
+    max-width: 100%;
+    min-height: 150px;
+}
+
+#dropzoneForm {
+    background: $eggColor;
+    border: dotted 1px #ccc;
+}
+.image-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+     
+}
+.map-wrapper iframe {
+    border: none;
+}
+.spotz-description {
+    
+    min-height: 150px;
+    p {
+        font-size: 1.5em;
+    }
+}
+
+.glyph-button {
+    cursor: pointer;
+    font-size: 2em;    
+}
+.glyph-button:hover {
+    color: red;
+}
+#new-comment-wrapper {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.image-row div {
+    position:  relative;    
+    display: inline-block;
+}
+.image-row div:hover .delete-image {
+    display: block;
+    opacity: 1;
+}
+.delete-image {
+    transition: all 0.2s ease-in;
+    top: -100px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+    opacity: 0;
+    width: 100%;
+    max-height: 30px;
+    position: absolute;
+    background: red;
+    margin-bottom: 4px;
+}
+
+.a-tag {
+    padding: 4px 6px;
+    margin: 4px;
+    color: #fff;
+    background: $darkBlue;
+    border-radius: 4px;
+    float: left;
+    display: block;
+}
+.a-tag a {
+    color: #fff;
+    cursor: pointer;
+}
+#addTagWrapper:last-child {
+    clear: left;
+}
+
+#textAddTag {
+         float: left; 
+         margin-right: 8px;      
+            }
+#addTagWrapper {
+    margin: 8px 0;
+}
+.remove-tag-btn {
+    cursor: pointer;
+}
+#tagMessage {
+    color:#e63946;
+    text-transform: uppercase;
+}
+
+// Form - New Spotz
+
+
+.img-preview {
+    min-height: 150px;
+    max-height: 150px;
+    border: 1px dashed #ccc;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.form-full-width {
+    min-width: 100%;
+}
+
+.animate {
+    font-size: 4em;
+   -webkit-animation-name: rotateThis;
+   -webkit-animation-duration: 2s;
+   -webkit-animation-iteration-count: infinite;
+   -webkit-animation-timing-function: linear;
+   animation-name: rotateThis;
+   animation-duration: 2s;
+   animation-iteration-count: infinite;
+   animation-timing-function: linear;
+}
+
+@-moz-keyframes rotateThis {
+ from { 
+        -webkit-transform: rotate( 0deg );  
+        transform: rotate( 0deg );
+    }
+ to  { 
+        -webkit-transform: rotate( 360deg );
+        transform: rotate( 360deg );
+    }
+}
+
+@-webkit-keyframes rotateThis {
+ from { 
+        -webkit-transform: rotate( 0deg );  
+        transform: rotate( 0deg );
+    }
+ to  { 
+        -webkit-transform: rotate( 360deg );
+        transform: rotate( 360deg );
+    }
+}
+
+@keyframes rotateThis {
+ from { 
+        -webkit-transform: rotate( 0deg );  
+        transform: rotate( 0deg );
+    }
+ to  { 
+        -webkit-transform: rotate( 360deg );
+        transform: rotate( 360deg );
+    }
+}
+
+

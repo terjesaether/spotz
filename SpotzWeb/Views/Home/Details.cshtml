@@ -1,0 +1,451 @@
+﻿@using Microsoft.Ajax.Utilities
+@using Microsoft.AspNet.Identity
+@model SpotzWeb.Models.SpotzDetailViewModel
+
+@{
+    ViewBag.Title = "Spotz! Details";
+}
+
+@if (Model.Spotz.User.UserName == User.Identity.Name)
+{
+    <span id="editTitleToggle" class="glyphicon glyphicon-pencil glyph-button"></span>
+
+}
+
+<h1 id="spotzTitle">@Model.Spotz.Title</h1>
+
+<div id="updateTitleWrapper" class="hidden">
+    <input type="text" class="form-control bottom-air-1" />
+    
+    <button id="updateTitleBtn" class="btn btn-primary bottom-air-1">Update Title</button>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        
+        @*MAIN IMAGE*@
+
+        <img src="@Model.GetLatestImage()" id="spotz-image" class="img-responsive" alt="@Model.Spotz.Title"/>
+        
+        @*DROPZONE*@
+        
+        
+        @if (Model.Spotz.User.UserName == User.Identity.GetUserName())
+        {
+        
+            <form action="/api/fileupload/@Model.Spotz.SpotzId"
+                  class="dropzone"
+                  id="dropzoneForm"
+                  method="post">
+                <div class="col-md-6">
+                    <input type="text" name="title" placeholder="Image Title" class="form-control"/>
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Add Photo(s)" id="addImageBtn" class="btn btn-info"/>
+                </div>            
+            </form>
+        }
+    </div>
+    
+    @*GOOGLE MAP*@
+
+    <div class="col-md-8">
+        <div class="col-md-8 col-md-push-4 bottom-air-1">
+            <div class="map-wrapper">
+                <iframe width="100%" src="https://www.google.com/maps/embed/v1/view?key=AIzaSyBwm7_-2a-YLlsDwT3l6OQn8rkuxUd0xEo&center=@Model.Spotz.Latitude,@Model.Spotz.Longitude&zoom=15"></iframe>
+            </div>
+        </div>
+              
+        @*TAGS*@
+
+        <div class="col-md-8">                     
+            <div id="tagWrapper">
+                <div data-bind="foreach: tags">
+                    <div class="a-tag">
+                        <a data-bind="text: TagName, attr: { id: 'tag_' + TagId, href: '/Home/GetSpotzByTag/' + TagName }"></a>&nbsp;<span data-bind="attr: { 'data-tagid': TagId }, click: $parent.removeTagKo, visible: $parent.isOwner" class="glyphicon glyphicon-remove remove-tag-btn"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="addTagWrapper">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <input type="text" class="form-control" id="textAddTag" placeholder="Add tag" />
+                    <button id="addTagbtn" data-bind="click: addTagKo" class="btn btn-info">Add tag</button>
+                    <p id="tagMessage"></p>
+                }
+                
+            </div>
+        </div>
+
+        @*USER*@
+
+        <div class="col-md-4">  
+            <p>Owner:</p>
+            <p>@Html.ActionLink(Model.Spotz.User.UserName, "GetSpotzByUser", new { id = Model.Spotz.User.Id })</p>
+            <img src="@Model.Spotz.User.GetGravatarUrl()" class="smaller-avatar" alt="@Model.Spotz.User.UserName"/>
+        </div>
+    </div>
+    <div class="col-md-12">
+       
+        @*IMAGES*@
+        
+        <div class="image-row" data-bind="foreach: images">
+            <div>
+                <a data-fancybox="gallery" data-bind="attr: { href: ImageUrl}"><img class="img-responsive" data-bind="attr: {src: ImageUrl+'/?thumb=80'}"></a>
+                <div data-bind="click: $parent.deleteImageKo, visible: $parent.isOwner" class="delete-image">Delete</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12 spotz-description">
+        @if (Model.Spotz.User.UserName == User.Identity.Name)
+        {
+            
+            <span id="editDescriptionToggle" class="glyphicon glyphicon-pencil glyph-button"></span>
+        }
+       
+        <p>@Model.Spotz.Description</p>
+        <div id="editDescriptionText" class="hidden">
+            <textarea class="text-area form-control bottom-air-1" type="text"></textarea>
+            <button id="updateDescriptionBtn" class="btn bg-primary bottom-air-1">Update text</button>
+        </div>
+    </div>
+
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+<div class="row">
+    <h3 class="bottom-air-1">Comments:</h3>
+    <button id="addCommentBtn" class="btn btn-info bottom-air-1">Add Comment</button>
+    <div id="addComment">
+        <textarea class="text-area form-control" id="addCommentText" type="text"></textarea>
+    </div>
+</div>
+}
+<div id="new-comment-wrapper"></div>
+
+@*COMMENTS*@
+
+<div id="comment-wrapper">
+    @foreach (var item in Model.Spotz.Comments)
+    {
+        <div class="row comment-section">
+
+            <div class="col-md-2">
+                @if (item.User != null)
+                {
+                    <h4>@item.User.UserName</h4>
+                }                
+                <img src="@item.User.GetGravatarUrl()" class="img-responsive" alt="@if (item.User != null)
+                                                                                    {
+                                                                                        @item.User.UserName
+                                                                                    } avatar"/>
+            </div>
+            <div class="col-md-9 col-md-push-1">
+                <p>@item.Text</p>
+            </div>
+
+        </div>
+    }
+</div>
+
+<p>
+    
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@Styles.Render("/Scripts/dropzone/dropzone.min.css")
+@Styles.Render("/Scripts/fancybox3/jquery.fancybox.min.css")
+@Styles.Render("~/bundles/jqueryuicss")
+
+@section scripts {
+    <script src="/Scripts/dropzone/dropzone.min.js" type="text/javascript"></script>
+    <script src="/Scripts/fancybox3/jquery.fancybox.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui-1.12.1.custom/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/Scripts/knockout-3.4.2.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+
+    <Script>
+
+        $(function() {
+
+            var addCommentButton = $('#addCommentBtn');
+            var currentUserId = '@User.Identity.GetUserId()';            
+            var spotzId = '@Model.Spotz.SpotzId';
+            var commentField = document.getElementById('addCommentText');
+            var descriptionText = $('.spotz-description p');
+            var spotzTextfieldWrapper = $('#editDescriptionText');
+            var textNewDescription = $('#editDescriptionText textarea');            
+            var updateTitleWrapper = $('#updateTitleWrapper');
+            var textNewTitle = $('#updateTitleWrapper input');
+            var titleText = $('#spotzTitle');
+            var textAddTag = $('#textAddTag');
+            var numOfTags = @Model.Spotz.Tags.Count();
+            var tagMessage = $('#tagMessage');
+            var tagsArray = new Array();
+            var mainImage = $('#spotz-image');
+
+
+            var isOwner = function() {
+                if (currentUserId === '@Model.Spotz.User.Id') {
+                    return true;
+            }
+                return false;
+            }
+
+            @foreach (var tag in Model.Tags)
+            {
+                @:tagsArray.push("@tag");
+            }
+            //console.log(tagsArray);
+
+
+
+        textNewDescription.val(descriptionText.text());
+        textNewTitle.val(titleText.text());
+        TweenMax.from(mainImage, 2, { opacity: 0 });
+        
+        // ==== KNOCKOUT ==== //
+
+        function ViewModel() {
+            var self = this;
+            self.tags = ko.observableArray([]);
+            self.images = ko.observableArray([]);
+            
+            self.isOwner = isOwner();
+
+            self.removeTagKo = function(tag) {
+                self.tags.remove(this);               
+                removeTag(tag.TagId);
+            };
+            self.addTagKo = function () {               
+                var newKoTag = self.tags;
+                addTag(newKoTag);
+            };
+
+            self.deleteImageKo = function (image) {
+                self.images.remove(this);              
+                deleteImage(image.ImageId);
+            }
+
+            console.log('Getting images');            
+            $.get('/api/getimages/' + spotzId)          
+                .done(function (data) {
+                    self.images.push.apply(self.images, data);
+                    
+                }).fail(function (err) {
+                    console.error(err);
+                });
+
+            console.log('Getting tags');            
+            $.get('/api/TagsApi/' + spotzId)          
+                .done(function (data) {
+                    self.tags.push.apply(self.tags, data);
+                    
+                }).fail(function (err) {
+                    console.error(err);
+                });
+
+        };
+        ko.applyBindings(new ViewModel());
+
+        
+
+        $('#editDescriptionToggle').click(function() {
+            toggleDescription();
+        });
+
+        $('#updateDescriptionBtn').click(function() {
+            var url = '/api/UpdateDescriptionText/';
+            var data = {
+                Id: spotzId,
+                Text: textNewDescription.val()
+            };
+            updateText(url, data, descriptionText, toggleDescription());
+
+        });
+
+        $('#updateTitleBtn').click(function() {
+            var url = '/api/UpdateTitleText/';
+            var data = {
+                Id: spotzId,
+                Text: textNewTitle.val()
+            };
+            updateText(url, data, titleText, toggleTitle());
+        });
+
+        $('#editTitleToggle').click(function() {
+            toggleTitle();
+        });
+
+        
+
+        function toggleTitle() {
+            updateTitleWrapper.toggleClass('hidden');
+            titleText.toggleClass('hidden');
+        }
+
+        function toggleDescription() {
+            descriptionText.toggleClass('hidden');
+            spotzTextfieldWrapper.toggleClass('hidden');
+        }
+
+            // ==== DROPZONE ==== //
+
+        Dropzone.options.dropzoneForm = {
+            autoProcessQueue: false,
+            uploadMultiple: false,
+            maxFiles: 1,
+            addRemoveLinks: true,
+            parallelUploads: 100,
+
+            init: function() {
+
+                var myDropZone = this;
+
+                $('#dropzoneForm').on('submit', uploadFile);
+
+                function uploadFile(e) {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropZone.processQueue();
+                }
+
+                this.on("success",
+                    function(file, data) {
+                        console.log(data.imgurl);
+
+                        //$("#spotz-image").attr("src", data.imgurl);
+                        document.getElementById('spotz-image').src = data.imgurl;
+
+                        //var res = eval('(' + data.xhr.responseText + ')');
+                        //var res = JSON.parse(data.xhr.responseText);
+                    });
+            }
+        };
+
+        addCommentButton.click(function() {
+            if (commentField.value === null || commentField.value === '') {
+                return;
+            }
+            $.post('/api/SpotzApi/AddComment/',
+                {
+                    Id: spotzId,
+                    UserId: currentUserId,
+                    Comment: commentField.value
+                })
+                .done(function(data) {
+                    if (data.status === "success") {
+                        console.log('Success!');
+                        commentField.value = 'Takk for kommentaren!';
+                        $('#new-comment-wrapper').html(
+                            '<div class=\'row comment-section\'>' +
+                            '<div class="col-md-2">' +
+                            data.user +
+                            "<img src='" +
+                            data.gravatarurl +
+                            "' class='img-responsive' />" +
+                            "</div><div class='col-md-10'>" +
+                            data.comment +
+                            "</div></div>");
+                    }
+
+
+                }).fail(function(err) {
+                    console.error(err);
+                });
+        });
+
+        function updateText(url, inData, updatedElement, toggle) {
+            $.post(url, inData)
+                .done(function(data) {
+                    console.log(data.status);
+                    updatedElement.text(data.text);
+                    toggle();
+                }).fail(function(err) {
+                    console.error(err);
+                });
+        }
+
+        function deleteImage(id) {
+            
+            $.post('/api/deleteimage/' + id)
+                .done(function(data) {
+                    //$('#image_' + data.id).fadeOut(1000);
+                    //$('#image_' + data.id).remove();
+                    console.log(data.status);
+
+                    //toggle();
+                }).fail(function(err) {
+                    console.error(err);
+                });
+        }
+
+        function addTag(newKoTag) {
+            if (numOfTags >= 7) {
+                tagMessage.text("You can't add more tags!").fadeOut(2000);                   
+                return;
+            }
+            $.post('/api/addtag/',
+                {
+                    Id : spotzId,
+                    Text : textAddTag.val()
+                })
+                .done(function (data) {
+                    if (data.status === "tagextists") {
+                        textAddTag.val('');
+                        $('#tagMessage').html('Tag Exist!').fadeOut(2000);                       
+                        //alert("Tag exist");
+                        return;
+                    }
+                    $('#tagMessage').html('Tag added!').fadeOut(2000);
+                    textAddTag.val('');
+                    numOfTags ++;
+                    newKoTag.push({ TagName: data.text, TagId: data.tagid });
+
+                }).fail(function (err) {
+                    console.error(err);
+                });
+            
+        };
+
+        function removeTag(tagId) {
+            $.post('/api/removetag/',
+                {
+                    SpotzId : spotzId,
+                    TagId : tagId
+                })             
+                .done(function (data) {
+                    numOfTags --;
+                    //$('#tagMessage').html('Tag removed!').fadeOut(2000);
+                   
+                }).fail(function (err) {
+                    console.error(err);
+                });
+        };
+
+        
+
+        $("#textAddTag").autocomplete({
+            source: tagsArray,
+            minLength: 2,
+            select: function(event, ui) {
+                console.log("Selected: " + ui.item.value);
+            }
+        });
+
+
+        });
+
+        
+
+    </Script>
+}
+
+
+

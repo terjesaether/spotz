@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="ApplicationName">Spotz!</string>
+ 
+  <string name="BaseUrl">http://169.254.80.80:59341/</string>
+
+
+  <string name="MessageNoSpotzTitle">No Spotz nearby!</string>
+  <string name="MessageNoSpotzBody">There are no Spotz nearby.</string>
+  <string name="MessageServerErrorTitle">Server trouble!</string>
+  <string name="MessageServerErrorBody">There are problems connecting to server.</string>
+  <string name="MessageCantFindLocation">Unable to determine your location. Try again in a short while. Have you turned on your Gps?</string>
+  <string name="MessageTurnOnGpsTitle">Please turn on Gps!</string>
+  <string name="MessageTurnOnGpsBody">You have to turn on Gps to get current gps-coordinates!</string>
+  <string name="MessageGpsEnabled">Gps enabled!</string>
+  <string name="MessageStatusChanged">Status changed!</string>
+  <string name="MessageNoLocaton">No location found. Previous Spotzes loaded.</string>
+</resources>

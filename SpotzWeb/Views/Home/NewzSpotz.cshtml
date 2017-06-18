@@ -1,0 +1,219 @@
+﻿
+@using Microsoft.AspNet.Identity
+@model SpotzWeb.Models.AddSpotzViewModel
+
+@{
+    ViewBag.Title = "New Spotz!";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        
+        <h1>New <img src="~/Images/Spotz-logo_mid.png" class="img-responsive" alt="Spotz Logo" /></h1>
+    </div>
+    <div class="col-md-6 img-preview">
+        <img class="img-responsive center-block" src="#" id="output" alt="" />
+    </div>
+</div>
+
+@using (Html.BeginForm("NewSpotz", "Home", FormMethod.Post, new
+{
+    @class = "form-horizontal",
+    role = "form",
+    enctype = "multipart/form-data",
+    id = "spotzForm"
+}))
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="row bottom-air-1">
+
+        <input type="hidden" id="latitudeField" name="latitude" />
+        <input type="hidden" id="longitudeField" name="longitude" />
+        <input type="hidden" id="tagField" name="TagNames" />
+        <input type="hidden" id="UserName" name="UserName" value="@User.Identity.Name" />
+        <input type="hidden" id="SpotzId" name="SpotzId" value="@ViewBag.NewGuid" />
+        
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Title, new { @class = "col-md-2" })
+            <div class="col-md-10 bottom-air-1">
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control form-full-width" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+                <div class= bottom-air-1 file-upload">
+                    <div class="col-md-2">
+                        <label for="file">Picture</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input type="file" name="file" onchange="onFileSelected(event)" id="file" class="" />
+                    </div>
+
+                </div>           
+        </div>
+
+        @Html.LabelFor(m => m.Description, new { @class = "col-md-1" })
+        <div class="col-md-5">
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control form-full-width", rows=5 })
+        </div>
+
+    </div>
+       
+      
+}
+
+<div class="row">
+      
+
+    @*TAGS*@
+
+    <div class="col-md-8">
+           
+        <div id="tagWrapper">
+            <div data-bind="foreach: tags">
+                <div class="a-tag">
+                    <a data-bind="text: TagName, attr: { id: 'tag_' + TagId}"></a>&nbsp;<span data-bind="attr: { 'data-tagid': TagId }, click: $parent.removeTagKo" class="glyphicon glyphicon-remove remove-tag-btn"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="addTagWrapper">
+            <input type="text" class="form-control" id="textAddTag" placeholder="Add tag" />
+            <button id="addTagbtn" data-bind="click: addTagKo" class="btn btn-info">Add tag</button>
+            <p id="tagMessage"></p>
+        </div>
+    </div>
+        
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-success" onclick="submitForm()">Create new Spotz!</button>
+    </div>
+</div>
+<div class="row">   
+    <div id="showLocation"></div>
+
+</div>
+
+
+
+@Styles.Render("~/bundles/jqueryuicss")
+
+@section scripts {
+   
+    <script src="/Scripts/jquery-ui-1.12.1.custom/jquery-ui.min.js" type="text/javascript"></script>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="/Scripts/knockout-3.4.2.js" type="text/javascript"></script>
+<script src="~/Scripts/custom/loadFile.js" type="text/javascript"></script>
+    <script src="~/Scripts/custom/getLocationForNewSpotz.js" type="text/javascript"></script>
+    <Script>
+
+        getLocation();
+
+        var x = document.getElementById("showLocation");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+        function showPosition(position) {
+            x.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+            $('#latitudeField').val(position.coords.latitude);
+            $('#longitudeField').val(position.coords.longitude);
+
+        }
+
+        function submitForm() {
+            $('#spotzForm').submit();
+        }
+
+
+
+        $(function() {
+
+
+            var textAddTag = $('#textAddTag');          
+            var existingTags = "";          
+            var tagsArray = new Array();          
+            var tagMessage = $('#tagMessage');
+            var tagField = $("#tagField");
+            var tagsAutocompleteArray = new Array();
+
+             @foreach (var tag in Model.Tags)
+            {
+                @:tagsAutocompleteArray.push("@tag");
+            }
+
+            //$('#UserName').val(userName);
+
+            getLocation();
+
+        // KNOCKOUT
+        function ViewModel() {
+            var self = this;
+            self.tags = ko.observableArray([]);
+            self.images = ko.observableArray([]);
+
+            self.removeTagKo = function(tag) {
+                self.tags.remove(this);
+                var tagInput = this.TagName;
+                console.log('remove: ' + this.TagName);
+
+                tagsArray = $.grep(tagsArray, function(value) {
+                    return value !== tagInput;
+                });
+                console.log(tagsArray);
+                tagField.val( tagsArray.join(','));
+
+            };
+            self.addTagKo = function () {
+                var newKoTag = self.tags;
+                var tagInput = textAddTag.val();
+
+                if (tagsArray.length >= 7) {
+                    tagMessage.text("You can't add more tags!").fadeOut(2000);
+                    return;
+                }
+
+                // Sjekk om tag eksisterer i array!
+                if ($.inArray(tagInput, tagsArray) === 0) {
+                    tagMessage.text('Tag exists!').fadeOut(1000);
+                    return;
+                }
+                tagsArray.push(tagInput);
+
+                console.log(tagsArray);
+                newKoTag.push({ TagName: tagInput, TagId: "" });
+
+                existingTags =  existingTags + tagInput + ",";
+
+                tagField.val( tagsArray.join(','));
+                textAddTag.val('');
+
+            };          
+
+        };
+        ko.applyBindings(new ViewModel());
+
+
+        $("#textAddTag").autocomplete({          
+            source: tagsAutocompleteArray,
+            minLength: 2,
+            select: function(event, ui) {
+                console.log("Selected: " + ui.item.value);
+            }
+        });
+
+
+        });
+
+
+    </Script>
+}
+
+
+

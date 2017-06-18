@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f7f4de"
+        android:weightSum="100"
+        android:id="@+id/mainRow">
+    <!--<ImageButton
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:id="@+id/imageButtonListSpotz" />-->
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageViewSpotz" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="80"
+            android:padding="10dp"
+            android:id="@+id/textLayout">
+            <TextView
+                android:text="Title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textTitle" />
+            <TextView
+                android:text="Description"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textDescription" />
+            <TextView
+                android:text="User name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textUserName" />
+        </LinearLayout>
+    </LinearLayout>
+<!--<android.webkit.WebView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/webImageView" />-->
+</LinearLayout>

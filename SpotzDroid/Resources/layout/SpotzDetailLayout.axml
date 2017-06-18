@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30"
+        android:id="@+id/imageMainSpotzDetail" />
+<!--HOVED-->
+    <Button
+        android:text="See in map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnOpenMap" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:background="#f7f4de"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:weightSum="100"
+        android:id="@+id/linearLayout1">
+    <!--TEKSTEN-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="0dp"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="80"
+            android:id="@+id/linearLayout2">
+            <TextView
+                android:text="Title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textTitleSpotzDetail" />
+            <TextView
+                android:text="Description"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textDescriptionSpotzDetail" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/wrapperTagsSpotzDetail" />
+            <TextView
+                android:text="Tags"
+                android:textSize="30pt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:background="#f4b042"
+                android:id="@+id/textAllTags" />
+        </LinearLayout>
+    <!--AVATAR OG BRUKERNAVN-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:id="@+id/wrapperUsernameAndAvatar">
+            <ImageView
+                android:src="@android:drawable/ic_menu_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageAvatarSpotzDetail" />
+            <TextView
+                android:text="Username"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:id="@+id/textUsernameSpotzDetail" />
+        </LinearLayout>
+    </LinearLayout>
+<!--COMMENTS-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:padding="10dp"
+        android:background="#fff"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/wrapperComments"
+        android:layout_marginTop="10dp" />
+<!--LISTVIEW-->
+</LinearLayout>

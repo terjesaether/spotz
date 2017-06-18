@@ -1,0 +1,11 @@
+﻿@model IEnumerable<SpotzWeb.Models.Spotz>
+
+@{
+    ViewBag.Title = "Get Spotz By User";
+}
+
+<h2>Spotz! belonging to @ViewBag.UserName</h2>
+
+
+@Html.Partial("_OneSpotzRow", Model)
+

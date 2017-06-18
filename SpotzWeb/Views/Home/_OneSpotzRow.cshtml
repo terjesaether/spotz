@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SpotzWeb.Models.Spotz>
+
+
+@foreach (var spotz in Model)
+{
+    <div class="row bottom-air-1 list-spotz-item">
+        <div class="col-md-2"><img src="@spotz.GetLatestImage(200)" class="img-responsive" alt="Image of @spotz.Title" /></div>
+        <div class="col-md-4">
+            <h2>@Html.ActionLink(spotz.Title, "Details", new { id = spotz.SpotzId })</h2>
+
+            @foreach (var tag in spotz.Tags)
+                {
+                <span class="a-tag">                   
+                    <a href="/Home/GetSpotzByTag/@tag.TagName">@tag.TagName</a>
+                </span>
+            }
+
+        </div>
+        <div class="col-md-4"><p>@spotz.Description</p></div>
+        <div class="col-md-2">
+            <div>
+                <img src="@spotz.User.GetGravatarUrl()" class="img-responsive" alt="Avatar for @spotz.User.UserName" />
+                @Html.ActionLink(spotz.User.UserName, "GetSpotzByUser", new { id = spotz.User.Id })
+            </div>
+        </div>
+    </div>
+
+}
+
